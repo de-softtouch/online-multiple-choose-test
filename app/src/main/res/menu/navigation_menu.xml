@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group>
+        <item android:title="Profile Setting">
+            <menu>
+                <item
+                    android:id="@+id/nav_item_account_setting"
+                    android:title="Account"></item>
+                <item android:title=""></item>
+                <item android:title="HIHHI"></item>
+                <item android:title="HIHHI"></item>
+            </menu>
+        </item>
+    </group>
+
+    <item
+        android:id="@+id/nav_item_logout"
+        android:title="Log out"></item>
+</menu>

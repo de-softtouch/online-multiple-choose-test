@@ -18,6 +18,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private final String TAG = getClass().getSimpleName();
 
+
     private TextView btnRegister;
     private EditText etEmail, etPassword;
     private Button btnLogin;
@@ -27,8 +28,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.acivity_login);
+        fAuth = FirebaseAuth.getInstance();
+        if (fAuth.getCurrentUser() != null) {
+            startMainActivity();
+        }
         getSupportActionBar().hide();
+        setContentView(R.layout.acivity_login);
         getViews();
 
         btnRegister = findViewById(R.id.tv_register);
@@ -37,7 +42,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         });
         fAuth = FirebaseAuth.getInstance();
 
-        etEmail.setText("nguyenkhanhduy@gmail.com");
+        etEmail.setText("test@gmail.com");
         etPassword.setText("password");
 
     }
