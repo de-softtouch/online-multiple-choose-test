@@ -1,7 +1,7 @@
 package com.learn.onlinemutiplechoosetest.model;
 
-import java.util.HashMap;
-import java.util.Map;
+import androidx.annotation.NonNull;
+
 import java.util.Objects;
 
 import lombok.AllArgsConstructor;
@@ -35,23 +35,7 @@ public class User {
                         Objects.equals(password, user.password);
     }
 
-    public HashMap<String, String> toMap(User user) {
-        HashMap<String, String> map = new HashMap<>();
-        map.put("username", user.getUsername());
-        map.put("email", user.getEmail());
-        map.put("avatar", user.getAvatar());
-        return map;
-    }
 
-    public static User toUser(Map<String, Object> map) {
-        User user
-                = new User();
-        user.setUserId((String) map.get("userId"));
-        user.setUsername((String) map.get("username"));
-        user.setEmail((String) map.get("email"));
-        user.setAvatar((String) map.get("avatar"));
-        return user;
-    }
 
     @Override
     public int hashCode() {

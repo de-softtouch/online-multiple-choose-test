@@ -3,14 +3,18 @@ package com.learn.onlinemutiplechoosetest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
@@ -19,6 +23,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+import com.learn.onlinemutiplechoosetest.ui.main.HomeFragment;
+import com.learn.onlinemutiplechoosetest.ui.profile.ProfileFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -60,8 +66,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        fStorage = FirebaseStorage.getInstance();
-//        fDatabase = FirebaseDatabase.getInstance();
 
 //        fDatabase
 //                .getReference("rooms")
@@ -106,9 +110,31 @@ public class MainActivity extends AppCompatActivity {
                 finish();
                 return;
             }
+            case R.id.nav_item_account_setting: {
+                fragmentClass = ProfileFragment.class;
+                navigationView.setCheckedItem(R.id.nav_item_account_setting);
 
+                break;
+            }
+            default: {
+                fragmentClass = HomeFragment.class;
+            }
         }
 
+        FragmentManager manager = getSupportFragmentManager();
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+            manager
+                    .beginTransaction()
+                    .addToBackStack(null)
+                    .replace(R.id.nav_host_fragment, fragment)
+                    .commit();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        }
+        drawerLayout.closeDrawer(GravityCompat.START);
     }
 
     private void setUpToggle() {
@@ -127,5 +153,14 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+    }
+
+    public void closeInputMethod() {
+        View currentFocus = getCurrentFocus();
+        if (currentFocus != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(currentFocus.getWindowToken(), 0);
+
+        }
     }
 }

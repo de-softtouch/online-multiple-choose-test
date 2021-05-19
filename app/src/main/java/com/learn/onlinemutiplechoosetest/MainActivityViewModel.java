@@ -27,7 +27,6 @@ public class MainActivityViewModel extends ViewModel {
                         User userInfo = UserUtils.toUser(documentSnapshot.getData());
                         this.currentUserInfo.setValue(userInfo);
                     }
-
                 });
     }
 }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -77,6 +78,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     void checkLogin(String email, String password) {
+        View currentFocus = getCurrentFocus();
+        if (currentFocus != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(currentFocus.getWindowToken(), 0);
+
+        }
         fAuth
                 .signInWithEmailAndPassword(email, password)
                 .addOnSuccessListener(authResult -> {
