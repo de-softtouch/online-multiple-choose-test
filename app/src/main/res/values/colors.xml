@@ -7,4 +7,15 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <!--    -->
+    <color name="primary">#FF793F</color>
+    <color name="emerald">#2ecc71</color>
+
+    <color name="drak_light_text">#C4C4C4</color>
+    <color name="secondary">#D87324</color>
+    <color name="blue">#00A8FF</color>
+    <color name="blue_night">#353b48</color>
+    <color name="electromagnetic">#2f3640</color>
+    <color name="blueberry_soda">#7f8fa6</color>
+    <color name="seabrook">#487eb0</color>
 </resources>
