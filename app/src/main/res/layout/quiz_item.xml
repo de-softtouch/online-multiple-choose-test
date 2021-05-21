@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_quizTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textSize="20sp" />
+
+    <CheckBox
+        android:id="@+id/a1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:buttonTint="@color/check_box_filter"
+        android:checked="false"
+        android:text="CheckBox"
+        android:textColor="@color/drak_light_text" />
+
+    <CheckBox
+        android:id="@+id/a2"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:buttonTint="@color/check_box_filter"
+        android:text="CheckBox"
+        android:textColor="@color/drak_light_text" />
+
+    <CheckBox
+        android:id="@+id/a3"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:buttonTint="@color/check_box_filter"
+        android:text="CheckBox"
+        android:textColor="@color/drak_light_text" />
+
+    <CheckBox
+        android:id="@+id/a4"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:buttonTint="@color/check_box_filter"
+        android:checked="false"
+        android:text="CheckBox"
+        android:textColor="@color/drak_light_text"
+        android:textColorLink="@color/primary" />
+
+</LinearLayout>

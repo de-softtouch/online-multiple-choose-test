@@ -15,8 +15,9 @@ import lombok.ToString;
 @ToString
 public class Quiz {
 
-    private String id;
+    private int quizNumber;
     private String title;
+    private double score;
     List<Answer> answers;
 
 }

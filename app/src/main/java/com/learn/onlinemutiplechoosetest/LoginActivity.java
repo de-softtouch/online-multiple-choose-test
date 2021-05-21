@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -45,6 +46,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         etEmail.setText("test@gmail.com");
         etPassword.setText("password");
+
+
+
 
     }
 
@@ -82,7 +86,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (currentFocus != null) {
             InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(currentFocus.getWindowToken(), 0);
-
         }
         fAuth
                 .signInWithEmailAndPassword(email, password)

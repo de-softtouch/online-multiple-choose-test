@@ -22,7 +22,10 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -93,6 +96,15 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
 
+        getViews(root);
+
+        registerForUserInfoChange();
+
+
+        return root;
+    }
+
+    private void getViews(View root) {
         progressBar = root.findViewById(R.id.progressBar);
         ivAvatar = root.findViewById(R.id.iv_pAvatar);
         etUsername = root.findViewById(R.id.et_pUsername);
@@ -101,6 +113,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         btnUpdate.setOnClickListener(this);
         btnChangeImage = root.findViewById(R.id.iv_changeAvatar);
         btnChangeImage.setOnClickListener(this);
+    }
+
+    private void registerForUserInfoChange() {
         viewModel.getCurrentUserInfo().observe(requireActivity(), user -> {
 
             if (user != null) {
@@ -111,9 +126,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             }
 
         });
-
-
-        return root;
     }
 
     @Override
@@ -142,8 +154,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private void updateProfile(String username) {
 
         ((MainActivity) getContext()).closeInputMethod();
+        etUsername.clearFocus();
         if (bitmap != null) {
-            updateUserAvatar();
+            uploadImage();
         }
 
         User user = userInfo;
@@ -162,7 +175,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 });
     }
 
-    private void updateUserAvatar() {
+    private void uploadImage() {
         progressBar.setVisibility(View.VISIBLE);
         btnUpdate.setClickable(false);
         Handler handler = new Handler();
@@ -175,7 +188,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                     .child(fAuth.getUid())
                     .putBytes(bytes)
                     .addOnSuccessListener(taskSnapshot -> {
-                        updateUserInfoAvatar(taskSnapshot);
+                        updateUserInfo(taskSnapshot);
 
                     });
             bitmap = null;
@@ -189,7 +202,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         thread.start();
     }
 
-    private void updateUserInfoAvatar(UploadTask.TaskSnapshot taskSnapshot) {
+    private void updateUserInfo(UploadTask.TaskSnapshot taskSnapshot) {
 
         taskSnapshot
                 .getMetadata()
@@ -202,16 +215,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                             .collection("users")
                             .document(fAuth.getUid())
                             .set(map, SetOptions.merge()).addOnSuccessListener(unused -> {
-
-                        fFirestore
-                                .collection("users")
-                                .document(fAuth.getUid())
-                                .get()
-                                .addOnSuccessListener(documentSnapshot -> {
-                                    Map<String, Object> data = documentSnapshot.getData();
-                                    User user = UserUtils.toUser(data);
-                                    viewModel.getCurrentUserInfo().setValue(user);
-                                });
                     });
                 });
     }
