@@ -232,7 +232,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), uri);
                 Glide.with(getContext()).load(bitmap).into(ivAvatar);
-
             } catch (IOException e) {
                 e.printStackTrace();
             }

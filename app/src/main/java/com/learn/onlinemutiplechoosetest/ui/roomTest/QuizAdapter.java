@@ -46,38 +46,56 @@ public class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.ItemViewHolder
         int q = position + 1;
         holder.tvQuizTitle.setText("Q" + q + ": " + quiz.getTitle());
 
+        holder.a1.setText(answers.get(0).getContent());
+        holder.a2.setText(answers.get(1).getContent());
+        holder.a3.setText(answers.get(2).getContent());
+        if (answers.size() > 3) {
+            holder.a4.setText(answers.get(3).getContent());
+        }
         holder.a1.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (onAnswerCheckedListener != null) {
-                holder.a2.setChecked(false);
-                holder.a3.setChecked(false);
-                holder.a4.setChecked(false);
-                onAnswerCheckedListener.onAnswerChecked(isChecked, quiz.getQuizNumber(), answers.get(0).getAnswerNumber());
+                if (isChecked) {
+                    holder.a2.setChecked(false);
+                    holder.a3.setChecked(false);
+                    holder.a4.setChecked(false);
+                }
+                onAnswerCheckedListener.onAnswerChecked(isChecked, quiz, answers.get(0));
             }
         });
         holder.a2.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (onAnswerCheckedListener != null) {
-                holder.a2.setChecked(false);
-                holder.a3.setChecked(false);
-                holder.a4.setChecked(false);
-                onAnswerCheckedListener.onAnswerChecked(isChecked, quiz.getQuizNumber(), answers.get(0).getAnswerNumber());
+                if (isChecked) {
+                    holder.a1.setChecked(false);
+                    holder.a3.setChecked(false);
+                    holder.a4.setChecked(false);
+                }
+                onAnswerCheckedListener.onAnswerChecked(isChecked, quiz, answers.get(1));
             }
         });
         holder.a3.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (onAnswerCheckedListener != null) {
-                holder.a2.setChecked(false);
-                holder.a3.setChecked(false);
-                holder.a4.setChecked(false);
-                onAnswerCheckedListener.onAnswerChecked(isChecked, quiz.getQuizNumber(), answers.get(0).getAnswerNumber());
+                if (isChecked) {
+                    holder.a2.setChecked(false);
+                    holder.a1.setChecked(false);
+                    holder.a4.setChecked(false);
+                }
+                onAnswerCheckedListener.onAnswerChecked(isChecked, quiz, answers.get(2));
             }
         });
-        holder.a4.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (onAnswerCheckedListener != null) {
-                holder.a2.setChecked(false);
-                holder.a3.setChecked(false);
-                holder.a4.setChecked(false);
-                onAnswerCheckedListener.onAnswerChecked(isChecked, quiz.getQuizNumber(), answers.get(0).getAnswerNumber());
-            }
-        });
+        holder.a4.setVisibility(View.INVISIBLE);
+        if (answers.size() > 3) {
+            holder.a4.setVisibility(View.VISIBLE);
+            holder.a4.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (onAnswerCheckedListener != null) {
+                    if (isChecked) {
+                        holder.a2.setChecked(false);
+                        holder.a3.setChecked(false);
+                        holder.a1.setChecked(false);
+                    }
+                    onAnswerCheckedListener.onAnswerChecked(isChecked, quiz, answers.get(3));
+                }
+            });
+        }
 
 
     }
@@ -103,6 +121,6 @@ public class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.ItemViewHolder
     }
 
     public interface OnAnswerCheckedListener {
-        void onAnswerChecked(boolean isChecked, int quizId, int answerId);
+        void onAnswerChecked(boolean isChecked, Quiz quiz, Answer answer);
     }
 }

@@ -4,4 +4,10 @@
     <string name="close">close_navigation</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_maps">Map</string>
+
+
+    <string name="facebook_app_id">820944385517863</string>
+    <string name="fb_login_protocol_scheme">fb820944385517863</string>
+    <string name="google_client_id">93104186692-ngq0cdn018l48d77u36652k6ssbpq78b.apps.googleusercontent.com</string>
 </resources>

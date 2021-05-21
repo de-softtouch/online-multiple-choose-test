@@ -15,22 +15,23 @@ import lombok.ToString;
 @ToString
 
 public class Answer {
-    private int answerNumber;
-    private String answerText;
+    private int code;
+    private String content;
     private boolean isTrue;
+
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Answer answer = (Answer) o;
-        return answerNumber == answer.answerNumber &&
+        return code == answer.code &&
                 isTrue == answer.isTrue &&
-                Objects.equals(answerText, answer.answerText);
+                Objects.equals(content, answer.content);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(answerNumber, answerText, isTrue);
+        return Objects.hash(code, content, isTrue);
     }
 }

@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class RoomUtils {
 
-    public HashMap<Quiz, Answer> toAnswerMap(List<Quiz> quizzes) {
+    public static HashMap<Quiz, Answer> toAnswerMap(List<Quiz> quizzes) {
         HashMap<Quiz, Answer> map = new HashMap<>();
         for (Quiz quiz :
                 quizzes) {
@@ -24,15 +24,22 @@ public class RoomUtils {
         return map;
     }
 
-    public double caculateScore(HashMap<Quiz, Answer> trueAnserMap, HashMap<Integer, Integer> answerMap) {
-        //quiz number,answer number
+    public static double caculateScore(HashMap<Quiz, Answer> main, HashMap<Quiz, Answer> userMap) {
+        if(userMap.size()<=0){
+            return 0.0;
+        }
         double finalScore = 0.0;
-        Set<Quiz> quizzes = trueAnserMap.keySet();
+        Set<Quiz> quizzes = main.keySet();
         for (Quiz quiz :
                 quizzes) {
-            
+            if (userMap.get(quiz) != null) {
+                if (userMap.get(quiz).equals(main.get(quiz))) {
+                    finalScore += quiz.getScore();
+                }
+            }
+
         }
-        return 0;
+        return finalScore;
     }
 
     ;;

@@ -26,6 +26,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
+import com.facebook.login.LoginManager;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -114,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (item.getItemId()) {
             case R.id.nav_item_logout: {
                 fAuth.signOut();
+                LoginManager.getInstance().logOut();
                 Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
                 finish();
