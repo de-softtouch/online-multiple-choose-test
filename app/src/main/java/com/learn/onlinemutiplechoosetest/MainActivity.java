@@ -12,6 +12,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,8 +34,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
 import com.learn.onlinemutiplechoosetest.model.Room;
 import com.learn.onlinemutiplechoosetest.ui.main.HomeFragment;
 import com.learn.onlinemutiplechoosetest.ui.profile.ProfileFragment;
@@ -46,40 +45,56 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private MainActivityViewModel mainActivityViewModel;
 
-    private FirebaseStorage fStorage;
-    private FirebaseFirestore fFirestore;
     private FirebaseAuth fAuth;
     private FirebaseDatabase fDatabase;
 
     private Toolbar toolbar;
-    private NavigationView navigationView;
     private DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle drawerToggle;
 
     private ImageView ivAvatar;
     private TextView tvUsername;
-    private Button btnFindRoom;
     private EditText etRoomCode;
+    private ProgressBar progressBar;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        fAuth = FirebaseAuth.getInstance();
-        mainActivityViewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
-        fDatabase = FirebaseDatabase.getInstance();
+        getViews();
+        setUpFirebase();
         setupToolbar();
-
         setUpToggle();
-
         setUpNavigationView();
-
         registerForUserDataChange();
     }
 
+    private void getViews() {
+    }
+
+    private void setUpFirebase() {
+        fAuth = FirebaseAuth.getInstance();
+        fDatabase = FirebaseDatabase.getInstance();
+    }
+
+    private void findRoomByRoomCode(String roomCode) {
+        fDatabase
+                .getReference("room-with-code")
+                .child(roomCode)
+                .get()
+                .addOnSuccessListener(snapshot -> {
+                    if (snapshot.exists() && snapshot.getValue() != null) {
+                        String roomId = snapshot.child("roomId").getValue(String.class);
+                        findRoomById(roomId);
+                    } else {
+                        //find room with room id
+                        findRoomById(roomCode);
+                    }
+                });
+    }
+
     private void registerForUserDataChange() {
+        mainActivityViewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
         mainActivityViewModel.getCurrentUserInfo().observe(this, user -> {
             if (user != null) {
                 changeNavHeaderInfo(user);
@@ -93,7 +108,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setUpNavigationView() {
-        navigationView = findViewById(R.id.navigation_view);
+        NavigationView navigationView = findViewById(R.id.navigation_view);
+        progressBar = navigationView.findViewById(R.id.progressBar1);
         navigationView.setNavigationItemSelectedListener(item -> {
             selectDrawerItem(item);
             return true;
@@ -104,14 +120,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             tvUsername = headerView.findViewById(R.id.tv_navUsername);
             etRoomCode = headerView.findViewById(R.id.et_roomCode);
             etRoomCode.setText("5f619064-4022-40ac-a5a9-fb7943822310");
-            btnFindRoom = headerView.findViewById(R.id.btn_findRomm);
+            Button btnFindRoom = headerView.findViewById(R.id.btn_findRomm);
             btnFindRoom.setOnClickListener(this);
         }
     }
 
     private void selectDrawerItem(MenuItem item) {
         Class fragmentClass = null;
-        Fragment fragment = null;
+        Fragment fragment ;
         switch (item.getItemId()) {
             case R.id.nav_item_logout: {
                 fAuth.signOut();
@@ -123,8 +139,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             case R.id.nav_item_account_setting: {
                 fragmentClass = ProfileFragment.class;
-                navigationView.setCheckedItem(R.id.nav_item_account_setting);
-
+                break;
+            }
+            case R.id.nav_item_recent_room: {
+                if (mainActivityViewModel.getRoomMutableLiveData().getValue() != null) {
+                    fragmentClass = RoomTestFragment.class;
+                } else {
+                    Toast.makeText(this,"You never joined a room",Toast.LENGTH_LONG).show();
+                    return;
+                }
                 break;
             }
             default: {
@@ -149,13 +172,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setUpToggle() {
-
         drawerLayout = findViewById(R.id.drawer_layout);
-
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav, R.string.close);
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav, R.string.close);
         drawerToggle.setDrawerIndicatorEnabled(true);
         drawerToggle.syncState();
-
         drawerLayout.addDrawerListener(drawerToggle);
     }
 
@@ -174,43 +194,72 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void checkRoomIsAvailable(String roomCode) {
-        closeInputMethod();
+    public void findRoomById(String roomCode) {
+
         fDatabase
                 .getReference("rooms")
-                .child(roomCode.toString())
+                .child(roomCode)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot != null && snapshot.exists()) {
+                        if ( snapshot.exists()) {
                             Room room = snapshot.getValue(Room.class);
-                            Log.d(TAG, "onDataChange: " + room.toString());
+
                             if (room.isUsePassword()) {
                                 showPasswordDialog(room);
                             } else {
-                                joinRoom(room);
+                                openRoomTestFragment(room);
                                 drawerLayout.closeDrawer(GravityCompat.START);
-                                return;
+                                progressBar.setVisibility(View.GONE);
                             }
                         } else {
+                            progressBar.setVisibility(View.GONE);
+
                             new AlertDialog.Builder(MainActivity.this)
                                     .setTitle("We were not found your room code")
                                     .setMessage("Please try another")
                                     .setPositiveButton("OK", (dialog, which) -> {
                                         dialog.dismiss();
                                         etRoomCode.setText("");
-                                        return;
                                     }).show();
-                            //not found room code given
-                            Log.d(TAG, "onDataChange: cannot find room code");
                         }
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
                         Log.d(TAG, "onCancelled: " + error.toString());
+
                     }
                 });
+
+//        fDatabase
+//                .getReference("rooms")
+//                .child(roomCode)
+//                .get()
+//                .addOnSuccessListener(snapshot -> {
+//                    if (snapshot != null && snapshot.exists()) {
+//                        Room room = snapshot.getValue(Room.class);
+//                        Log.d(TAG, "onDataChange: " + room.toString());
+//                        if (room.isUsePassword()) {
+//                            showPasswordDialog(room);
+//                        } else {
+//                            joinRoom(room);
+//                            drawerLayout.closeDrawer(GravityCompat.START);
+//                            return;
+//                        }
+//                    } else {
+//                        new AlertDialog.Builder(MainActivity.this)
+//                                .setTitle("We were not found your room code")
+//                                .setMessage("Please try another")
+//                                .setPositiveButton("OK", (dialog, which) -> {
+//                                    dialog.dismiss();
+//                                    etRoomCode.setText("");
+//                                    return;
+//                                }).show();
+//                        //not found room code given
+//                        Log.d(TAG, "onDataChange: cannot find room code");
+//                    }
+//                });
 
 
     }
@@ -237,25 +286,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (room.getPassword().equals(pass)) {
                         closeInputMethod();
                         Toast.makeText(MainActivity.this, "Enter success!", Toast.LENGTH_SHORT).show();
-                        joinRoom(room);
+                        openRoomTestFragment(room);
                         dialog.dismiss();
                         drawerLayout.closeDrawer(GravityCompat.START);
-                        return;
                     } else {
                         etPassword.setError("Your password is not correct");
                         Toast.makeText(MainActivity.this, "Enter failure!", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
-            negativeBtn.setOnClickListener(v -> {
-                dialog.dismiss();
-            });
+            negativeBtn.setOnClickListener(v -> dialog.dismiss());
 
         });
         dialog.show();
     }
 
-    void joinRoom(Room room) {
+    void openRoomTestFragment(Room room) {
         mainActivityViewModel.getRoomMutableLiveData().setValue(room);
         FragmentManager sFm = getSupportFragmentManager();
         sFm
@@ -263,18 +309,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .replace(R.id.nav_host_fragment, RoomTestFragment.newInstance())
                 .addToBackStack(null)
                 .commit();
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_findRomm: {
+                progressBar.setVisibility(View.VISIBLE);
+                closeInputMethod();
+
                 String roomCode = etRoomCode.getText().toString().trim();
                 if (TextUtils.isEmpty(roomCode)) {
                     etRoomCode.setText("Please enter room code to join room");
                     return;
                 }
-                checkRoomIsAvailable(roomCode);
+                findRoomByRoomCode(roomCode);
                 break;
             }
         }

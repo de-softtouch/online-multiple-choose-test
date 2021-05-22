@@ -17,7 +17,7 @@ import lombok.ToString;
 @ToString
 public class Room {
 
-    private String uuid;
+    private String id;
     private String adminId;
     private String name;
     private String password;

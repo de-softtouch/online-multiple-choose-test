@@ -1,20 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+
     <group>
         <item android:title="Profile Setting">
             <menu>
                 <item
                     android:id="@+id/nav_item_account_setting"
-                    android:title="Account"></item>
-                <item android:title=""></item>
-                <item android:title="HIHHI"></item>
-                <item android:title="HIHHI"></item>
+                    android:title="Account" />
+                <item android:title="" />
+                <item android:title="HIHHI" />
+                <item android:title="HIHHI" />
+            </menu>
+        </item>
+    </group>
+
+    <group>
+        <item android:title="Room">
+            <menu>
+                <item
+                    android:id="@+id/nav_item_recent_room"
+                    android:icon="@drawable/ic_baseline_access_time_24"
+                    android:title="Recent Joined" />
+                <item android:title="Create room" />
             </menu>
         </item>
     </group>
 
     <item
         android:id="@+id/nav_item_logout"
-        android:title="Log out"></item>
+        android:icon="@drawable/ic_baseline_exit_to_app_24"
+        android:title="Log out" />
 </menu>

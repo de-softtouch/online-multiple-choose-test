@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,7 +29,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private FirebaseAuth fAuth;
 
     private EditText etEmail, etPassword;
-    private Button btnRegister;
+    private Button btnRegister,btnCancel;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,14 +49,16 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         etPassword = findViewById(R.id.et_passsword);
         btnRegister = findViewById(R.id.btn_register);
         btnRegister.setOnClickListener(this);
+        btnCancel = findViewById(R.id.btn_cancelRegister);
+        btnCancel.setOnClickListener(this);
+        progressBar = findViewById(R.id.progressBar_register);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_register: {
-
-                ;
+                progressBar.setVisibility(View.VISIBLE);
                 String email = etEmail.getText().toString().trim();
                 String password = etPassword.getText().toString().trim();
                 if (TextUtils.isEmpty(email)) {
@@ -69,13 +73,23 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     etPassword.setError("Password must not be blank");
                     return;
                 }
-                doRegister(email, password);
+                registerAccount(email, password);
+                break;
+            }
+            case R.id.btn_cancelRegister:   {
+                startLoginActivity();
                 break;
             }
         }
     }
 
-    private void doRegister(String email, String password) {
+    private void startLoginActivity() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void registerAccount(String email, String password) {
         View currentFocus = getCurrentFocus();
         if (currentFocus != null) {
             InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
@@ -92,6 +106,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     etEmail.setError("The email address is already in use by another account");
                     etPassword.setText("");
                     Log.d(TAG, "doRegister: " + e.toString());
+                    progressBar.setVisibility(View.GONE);
+
                 });
 
     }

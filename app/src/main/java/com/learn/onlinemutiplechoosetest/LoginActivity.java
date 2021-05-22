@@ -1,4 +1,4 @@
-package com.learn.onlinemutiplechoosetest;
+ package com.learn.onlinemutiplechoosetest;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -89,7 +89,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     etEmail.setText("Email must not be blank!");
                     return;
                 }
-                handleSignInWithEmailAndPass(email, password);
+                authWithEmailAndPassword(email, password);
                 break;
             }
 
@@ -198,7 +198,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 });
     }
 
-    void handleSignInWithEmailAndPass(String email, String password) {
+    void authWithEmailAndPassword(String email, String password) {
         closeInputMethod();
         process.setVisibility(View.VISIBLE);
         fAuth

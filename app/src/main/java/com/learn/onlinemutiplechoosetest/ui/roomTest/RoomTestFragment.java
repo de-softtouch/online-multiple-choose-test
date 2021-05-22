@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,15 +18,18 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.FirebaseDatabase;
 import com.learn.onlinemutiplechoosetest.MainActivity;
 import com.learn.onlinemutiplechoosetest.MainActivityViewModel;
 import com.learn.onlinemutiplechoosetest.R;
 import com.learn.onlinemutiplechoosetest.model.Answer;
 import com.learn.onlinemutiplechoosetest.model.Quiz;
 import com.learn.onlinemutiplechoosetest.model.Room;
+import com.learn.onlinemutiplechoosetest.model.User;
 import com.learn.onlinemutiplechoosetest.ui.main.HomeFragment;
 import com.learn.onlinemutiplechoosetest.utils.RoomUtils;
 
+import java.util.Date;
 import java.util.HashMap;
 
 public class RoomTestFragment extends Fragment implements QuizAdapter.OnAnswerCheckedListener, View.OnClickListener {
@@ -36,11 +40,14 @@ public class RoomTestFragment extends Fragment implements QuizAdapter.OnAnswerCh
     private RecyclerView recyclerView;
     private Room currentRoom;
     private MainActivityViewModel viewModel;
+    private FirebaseDatabase fDatabase;
+
     long seconds;
     private Handler handler;
 
     private TextView tvTimeCountDown, tvTitle;
     private Button btnSubmit;
+    private ImageButton btnBack;
 
     private HashMap<Quiz, Answer> map = new HashMap<>();
 
@@ -56,7 +63,7 @@ public class RoomTestFragment extends Fragment implements QuizAdapter.OnAnswerCh
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(getActivity()).get(MainActivityViewModel.class);
-
+        fDatabase = FirebaseDatabase.getInstance();
     }
 
     @Override
@@ -104,6 +111,8 @@ public class RoomTestFragment extends Fragment implements QuizAdapter.OnAnswerCh
         tvTitle = root.findViewById(R.id.tv_roomName);
         btnSubmit = root.findViewById(R.id.btn_submitAnswer);
         btnSubmit.setOnClickListener(this);
+        btnBack = root.findViewById(R.id.btn_back);
+        btnBack.setOnClickListener(this);
         return root;
     }
 
@@ -164,21 +173,42 @@ public class RoomTestFragment extends Fragment implements QuizAdapter.OnAnswerCh
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_submitAnswer: {
-
                 scoreDialog();
-
-
-//                Set<Quiz> quizzes = map.keySet();
-//                for (Quiz quiz :
-//                        quizzes) {
-//                    Answer answer = map.get(quiz);
-//                    Log.d(TAG, "onSubmitAnswers: " + quiz.getTitle() + "\t" + answer.getContent() + "\n");
-//                }
-
-                break;
-            }
+                User user = viewModel.getCurrentUserInfo().getValue();
+                String roomID = currentRoom.getId();
+                HashMap<String,Object> map = new HashMap<>();
+                map.put("userId",user.getUserId());
+                map.put("username",user.getUsername());
+                map.put("score",getScore());
+                map.put("time",new Date().toString());
+                //
+                fDatabase
+                        .getReference("rooms-and-users")
+                        .child(roomID)
+                        .child(user.getUserId())
+                        .setValue(map);
+            break;
+        }
+        case R.id.btn_back: {
+            new AlertDialog.Builder(getContext())
+                    .setTitle("Are you sure to exit test?")
+                    .setMessage("Your answer will not be submitted!")
+                    .setPositiveButton("Ok", ((dialog, which) -> {
+                        ((MainActivity) getContext())
+                                .getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.nav_host_fragment, new HomeFragment())
+                                .commit();
+                    }))
+                    .setNegativeButton("Cancel", ((dialog, which) -> {
+                        dialog.dismiss();
+                    }))
+                    .show();
+            break;
         }
     }
+
+}
 
     private void scoreDialog() {
         preventUserSubmitAgain();
@@ -197,6 +227,6 @@ public class RoomTestFragment extends Fragment implements QuizAdapter.OnAnswerCh
     }
 
     public double getScore() {
-        return  RoomUtils.caculateScore(RoomUtils.toAnswerMap(currentRoom.getQuizzes()), this.map);
+        return RoomUtils.caculateScore(RoomUtils.toAnswerMap(currentRoom.getQuizzes()), this.map);
     }
 }

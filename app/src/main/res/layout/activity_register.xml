@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primary">
@@ -57,25 +58,6 @@
 
     <Button
 
-        android:id="@+id/button4"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="32dp"
-        android:backgroundTint="@color/electromagnetic"
-        android:padding="15dp"
-        android:text="Register with Google"
-
-        app:cornerRadius="25dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_register" />
-
-    <Button
-
         android:id="@+id/btn_register"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -84,25 +66,30 @@
         android:layout_marginEnd="32dp"
         android:backgroundTint="@color/electromagnetic"
         android:padding="15dp"
-        android:text="Register"
 
+        android:text="Register"
         app:cornerRadius="25dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_passsword" />
 
-    <TextView
+    <Button
+
         android:id="@+id/btn_cancelRegister"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:onClick="onClick"
-        android:text="cancel"
-        android:textColor="@color/drak_light_text"
-        android:textSize="16sp"
-        android:textStyle="italic"
-        app:layout_constraintEnd_toEndOf="@+id/button4"
-        app:layout_constraintTop_toBottomOf="@+id/button4" />
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:backgroundTint="@color/electromagnetic"
+        android:padding="15dp"
+
+        android:text="Cancel"
+        app:cornerRadius="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_register" />
 
     <ProgressBar
         android:id="@+id/progressBar_register"
