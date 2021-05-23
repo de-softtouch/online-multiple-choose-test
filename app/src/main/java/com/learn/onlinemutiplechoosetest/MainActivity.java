@@ -37,7 +37,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.learn.onlinemutiplechoosetest.model.Room;
 import com.learn.onlinemutiplechoosetest.ui.main.HomeFragment;
 import com.learn.onlinemutiplechoosetest.ui.profile.ProfileFragment;
-import com.learn.onlinemutiplechoosetest.ui.roomTest.RoomTestFragment;
+import com.learn.onlinemutiplechoosetest.ui.roomTest.ui.CreateRoomFragment;
+import com.learn.onlinemutiplechoosetest.ui.roomTest.ui.RoomTestFragment;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -127,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void selectDrawerItem(MenuItem item) {
         Class fragmentClass = null;
-        Fragment fragment ;
+        Fragment fragment;
         switch (item.getItemId()) {
             case R.id.nav_item_logout: {
                 fAuth.signOut();
@@ -145,9 +146,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (mainActivityViewModel.getRoomMutableLiveData().getValue() != null) {
                     fragmentClass = RoomTestFragment.class;
                 } else {
-                    Toast.makeText(this,"You never joined a room",Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "You never joined a room", Toast.LENGTH_LONG).show();
                     return;
                 }
+                break;
+            }
+            case R.id.nav_item_create_room: {
+              fragmentClass = CreateRoomFragment.class;
                 break;
             }
             default: {
@@ -170,6 +175,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         drawerLayout.closeDrawer(GravityCompat.START);
     }
+
 
     private void setUpToggle() {
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -202,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if ( snapshot.exists()) {
+                        if (snapshot.exists()) {
                             Room room = snapshot.getValue(Room.class);
 
                             if (room.isUsePassword()) {

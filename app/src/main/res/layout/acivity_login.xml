@@ -27,7 +27,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="64dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="60dp"
         android:background="@drawable/input_background"
@@ -40,16 +39,15 @@
         app:layout_constraintBottom_toTopOf="@+id/et_loginPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/et_loginPassword"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
         android:background="@drawable/input_background"
         android:elevation="4dp"
         android:ems="10"
@@ -57,9 +55,9 @@
         android:inputType="textPersonName"
         android:textColor="@color/blue_night"
         android:textStyle="italic"
+        app:layout_constraintBottom_toTopOf="@+id/btn_signIn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_loginEmail" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
 
@@ -67,16 +65,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
         android:backgroundTint="@color/electromagnetic"
         android:padding="15dp"
         android:text="Sign In"
         app:cornerRadius="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_loginPassword" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btn_loginWithGG"
@@ -101,15 +99,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginBottom="32dp"
         android:backgroundTint="@color/blue_night"
         android:padding="15dp"
         android:text="Sign in with Facebook"
         app:cornerRadius="25dp"
         app:icon="@drawable/ic_facebook_f_brands"
         app:iconGravity="textStart"
-        app:layout_constraintBottom_toTopOf="@+id/tv_register"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_loginWithGG" />

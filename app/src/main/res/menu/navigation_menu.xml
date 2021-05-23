@@ -2,30 +2,41 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
 
+    <item
+        android:title="Home"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:tooltipText="adfafdasf"
+        />
     <group>
-        <item android:title="Profile Setting">
+        <item android:title="Room">
             <menu>
                 <item
-                    android:id="@+id/nav_item_account_setting"
-                    android:title="Account" />
-                <item android:title="" />
-                <item android:title="HIHHI" />
-                <item android:title="HIHHI" />
+                    android:tooltipText="Create your own room"
+
+                    android:id="@+id/nav_item_create_room"
+                    android:icon="@drawable/ic_baseline_add_24"
+                    android:title="Create room" />
+                <item
+
+                    android:id="@+id/nav_item_recent_room"
+                    android:icon="@drawable/ic_baseline_access_time_24"
+                    android:title="Recent Joined" />
+
             </menu>
         </item>
     </group>
 
     <group>
-        <item android:title="Room">
+        <item android:title="Profile Setting">
             <menu>
                 <item
-                    android:id="@+id/nav_item_recent_room"
-                    android:icon="@drawable/ic_baseline_access_time_24"
-                    android:title="Recent Joined" />
-                <item android:title="Create room" />
+                    android:id="@+id/nav_item_account_setting"
+                    android:icon="@drawable/ic_baseline_account_box_24"
+                    android:title="Account" />
             </menu>
         </item>
     </group>
+
 
     <item
         android:id="@+id/nav_item_logout"

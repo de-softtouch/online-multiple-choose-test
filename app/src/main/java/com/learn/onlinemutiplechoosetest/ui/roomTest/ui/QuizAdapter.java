@@ -1,4 +1,4 @@
-package com.learn.onlinemutiplechoosetest.ui.roomTest;
+package com.learn.onlinemutiplechoosetest.ui.roomTest.ui;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -44,7 +44,7 @@ public class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.ItemViewHolder
         Quiz quiz = quizzes.get(position);
         List<Answer> answers = quiz.getAnswers();
         int q = position + 1;
-        holder.tvQuizTitle.setText("Q" + q + ": " + quiz.getTitle());
+        holder.tvQuizTitle.setText("QUESTION " + q + ": " + quiz.getTitle());
 
         holder.a1.setText(answers.get(0).getContent());
         holder.a2.setText(answers.get(1).getContent());

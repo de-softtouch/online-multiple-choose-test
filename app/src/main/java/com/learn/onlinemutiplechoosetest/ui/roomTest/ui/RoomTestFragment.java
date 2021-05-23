@@ -1,4 +1,4 @@
-package com.learn.onlinemutiplechoosetest.ui.roomTest;
+package com.learn.onlinemutiplechoosetest.ui.roomTest.ui;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
@@ -47,7 +47,6 @@ public class RoomTestFragment extends Fragment implements QuizAdapter.OnAnswerCh
 
     private TextView tvTimeCountDown, tvTitle;
     private Button btnSubmit;
-    private ImageButton btnBack;
 
     private HashMap<Quiz, Answer> map = new HashMap<>();
 
@@ -55,8 +54,7 @@ public class RoomTestFragment extends Fragment implements QuizAdapter.OnAnswerCh
     }
 
     public static RoomTestFragment newInstance() {
-        RoomTestFragment fragment = new RoomTestFragment();
-        return fragment;
+        return new RoomTestFragment();
     }
 
     @Override
@@ -96,7 +94,6 @@ public class RoomTestFragment extends Fragment implements QuizAdapter.OnAnswerCh
                             .setCancelable(false)
                             .show();
                 }
-
             }
         });
 
@@ -111,7 +108,7 @@ public class RoomTestFragment extends Fragment implements QuizAdapter.OnAnswerCh
         tvTitle = root.findViewById(R.id.tv_roomName);
         btnSubmit = root.findViewById(R.id.btn_submitAnswer);
         btnSubmit.setOnClickListener(this);
-        btnBack = root.findViewById(R.id.btn_back);
+        ImageButton btnBack = root.findViewById(R.id.btn_back);
         btnBack.setOnClickListener(this);
         return root;
     }
@@ -126,8 +123,7 @@ public class RoomTestFragment extends Fragment implements QuizAdapter.OnAnswerCh
         int sec = min * 60;
         int minutes = (int) (sec / 60);
         int s = (int) (sec % 60);
-        String format = String.format("%d:%02d", minutes, s);
-        return format;
+        return String.format("%d:%02d", minutes, s);
     }
 
     private Runnable runnable = new Runnable() {
@@ -137,7 +133,7 @@ public class RoomTestFragment extends Fragment implements QuizAdapter.OnAnswerCh
             int minutes = (int) (seconds / 60);
             int s = (int) (seconds % 60);
             String format = String.format("%d:%02d", minutes, s);
-            tvTimeCountDown.setText(String.valueOf(format));
+            tvTimeCountDown.setText(format);
             if (seconds == 0) {
                 handler.removeCallbacks(this::run);
                 showTimeUpDialog();
@@ -176,39 +172,38 @@ public class RoomTestFragment extends Fragment implements QuizAdapter.OnAnswerCh
                 scoreDialog();
                 User user = viewModel.getCurrentUserInfo().getValue();
                 String roomID = currentRoom.getId();
-                HashMap<String,Object> map = new HashMap<>();
-                map.put("userId",user.getUserId());
-                map.put("username",user.getUsername());
-                map.put("score",getScore());
-                map.put("time",new Date().toString());
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("userId", user.getUserId());
+                map.put("username", user.getUsername());
+                map.put("score", getScore());
+                map.put("time", new Date().toString());
                 //
                 fDatabase
                         .getReference("rooms-and-users")
                         .child(roomID)
                         .child(user.getUserId())
                         .setValue(map);
-            break;
-        }
-        case R.id.btn_back: {
-            new AlertDialog.Builder(getContext())
-                    .setTitle("Are you sure to exit test?")
-                    .setMessage("Your answer will not be submitted!")
-                    .setPositiveButton("Ok", ((dialog, which) -> {
-                        ((MainActivity) getContext())
-                                .getSupportFragmentManager()
-                                .beginTransaction()
-                                .replace(R.id.nav_host_fragment, new HomeFragment())
-                                .commit();
-                    }))
-                    .setNegativeButton("Cancel", ((dialog, which) -> {
-                        dialog.dismiss();
-                    }))
-                    .show();
-            break;
+                break;
+            }
+            case R.id.btn_back: {
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Are you sure to exit test?")
+                        .setMessage("Your answer will not be submitted!")
+                        .setPositiveButton("Ok", ((dialog, which) -> {
+                            ((MainActivity) getContext())
+                                    .getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .replace(R.id.nav_host_fragment, new HomeFragment())
+                                    .commit();
+                        }))
+                        .setNegativeButton("Cancel", ((dialog, which) -> {
+                            dialog.dismiss();
+                        }))
+                        .show();
+                break;
+            }
         }
     }
-
-}
 
     private void scoreDialog() {
         preventUserSubmitAgain();
