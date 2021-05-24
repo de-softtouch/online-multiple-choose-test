@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -22,10 +21,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -34,13 +30,11 @@ import com.learn.onlinemutiplechoosetest.MainActivity;
 import com.learn.onlinemutiplechoosetest.MainActivityViewModel;
 import com.learn.onlinemutiplechoosetest.R;
 import com.learn.onlinemutiplechoosetest.model.User;
-import com.learn.onlinemutiplechoosetest.utils.UserUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -137,8 +131,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                     etUsername.setError("Your username is blank");
                     return;
                 }
-
-
+                progressBar.setVisibility(View.VISIBLE);
                 updateProfile(username);
                 break;
             }
@@ -152,7 +145,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     }
 
     private void updateProfile(String username) {
-
         ((MainActivity) getContext()).closeInputMethod();
         etUsername.clearFocus();
         if (bitmap != null) {
@@ -167,39 +159,41 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 .document(fAuth.getUid())
                 .set(user, SetOptions.merge())
                 .addOnSuccessListener(unused -> {
+
 //                    Toast.makeText(getContext(), "Update username success", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(getContext(), "Cannot update username", Toast.LENGTH_SHORT).show();
 
                 });
+        progressBar.setVisibility(View.GONE);
+
     }
 
     private void uploadImage() {
-        progressBar.setVisibility(View.VISIBLE);
         btnUpdate.setClickable(false);
-        Handler handler = new Handler();
-        Thread thread = new Thread(() -> {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-            byte[] bytes = baos.toByteArray();
-            fStorage.getReference()
-                    .child("avatars")
-                    .child(fAuth.getUid())
-                    .putBytes(bytes)
-                    .addOnSuccessListener(taskSnapshot -> {
-                        updateUserInfo(taskSnapshot);
+//        Handler handler = new Handler();
+//        Thread thread = new Thread(() -> {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] bytes = baos.toByteArray();
+        fStorage.getReference()
+                .child("avatars")
+                .child(fAuth.getUid())
+                .putBytes(bytes)
+                .addOnSuccessListener(taskSnapshot -> {
+                    updateUserInfo(taskSnapshot);
 
-                    });
-            bitmap = null;
-            handler.post(() -> {
-                progressBar.setVisibility(View.INVISIBLE);
-            });
-            btnUpdate.setClickable(true);
+                });
+        bitmap = null;
+//            handler.post(() -> {
+        progressBar.setVisibility(View.INVISIBLE);
+//            });
+        btnUpdate.setClickable(true);
 
 
-        });
-        thread.start();
+//        });
+//        thread.start();
     }
 
     private void updateUserInfo(UploadTask.TaskSnapshot taskSnapshot) {

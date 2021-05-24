@@ -10,9 +10,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.database.FirebaseDatabase;
 import com.learn.onlinemutiplechoosetest.MainActivity;
@@ -25,15 +29,18 @@ import com.learn.onlinemutiplechoosetest.ui.roomTest.RoomViewModel;
 
 import java.util.List;
 
-public class CreateRoomFragment extends Fragment implements View.OnClickListener {
+public class RoomNewFragment extends Fragment implements View.OnClickListener {
 
     private final String TAG = getClass().getSimpleName();
     private Button btnAddQuiz, btnSave;
     private FragmentManager fragmentManager;
     private RoomViewModel roomViewModel;
-    private TextView tvRoomName;
+    private TextView tvRoomName, tvTime;
 
-    public CreateRoomFragment() {
+    private QuizAdapter adapter;
+    private RecyclerView recyclerView;
+
+    public RoomNewFragment() {
     }
 
     @Override
@@ -47,15 +54,44 @@ public class CreateRoomFragment extends Fragment implements View.OnClickListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_create_room, container, false);
-        btnAddQuiz = root.findViewById(R.id.btn_addQuiz);
-        btnAddQuiz.setOnClickListener(this);
-        tvRoomName = root.findViewById(R.id.tv_nNewRoomName);
-        btnSave = root.findViewById(R.id.btn_saveRoomNew);
-        btnSave.setOnClickListener(this);
+        View root = getViews(inflater, container);
         new RoomBasicInfoDialog()
                 .show(((MainActivity) getContext())
                         .getSupportFragmentManager(), "Basic Info");
+
+        registerQuizzesChange();
+        return root;
+    }
+
+    private void registerQuizzesChange() {
+        roomViewModel.getQuizzes().observe(getActivity(), quizzes -> {
+            if (quizzes != null) {
+                adapter = new QuizAdapter(getContext(), quizzes);
+                recyclerView.setAdapter(adapter);
+            }
+        });
+//        adapter = new QuizAdapter(getContext(), roomViewModel.getQuizzes().getValue());
+//        recyclerView.setAdapter(adapter);
+
+        roomViewModel.getRoomNew().observe(getActivity(), room -> {
+            if (room != null) {
+                tvRoomName.setText(room.getName()+"");
+                tvTime.setText(room.getTime()+"");
+            }
+        });
+    }
+
+    @NonNull
+    private View getViews(LayoutInflater inflater, ViewGroup container) {
+        View root = inflater.inflate(R.layout.fragment_room_new, container, false);
+        btnAddQuiz = root.findViewById(R.id.btn_addQuiz);
+        btnAddQuiz.setOnClickListener(this);
+        tvRoomName = root.findViewById(R.id.tv_nNewRoomName);
+        tvTime = root.findViewById(R.id.tv_233232);
+        btnSave = root.findViewById(R.id.btn_saveRoomNew);
+        btnSave.setOnClickListener(this);
+        recyclerView = root.findViewById(R.id.rcv_quizzesNew);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
         return root;
     }

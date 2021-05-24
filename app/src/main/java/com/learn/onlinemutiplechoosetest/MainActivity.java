@@ -37,7 +37,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.learn.onlinemutiplechoosetest.model.Room;
 import com.learn.onlinemutiplechoosetest.ui.main.HomeFragment;
 import com.learn.onlinemutiplechoosetest.ui.profile.ProfileFragment;
-import com.learn.onlinemutiplechoosetest.ui.roomTest.ui.CreateRoomFragment;
+import com.learn.onlinemutiplechoosetest.ui.roomTest.ui.RoomNewFragment;
 import com.learn.onlinemutiplechoosetest.ui.roomTest.ui.RoomTestFragment;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -131,11 +131,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Fragment fragment;
         switch (item.getItemId()) {
             case R.id.nav_item_logout: {
-                fAuth.signOut();
-                LoginManager.getInstance().logOut();
-                Intent intent = new Intent(this, LoginActivity.class);
-                startActivity(intent);
-                finish();
+                signOut();
                 return;
             }
             case R.id.nav_item_account_setting: {
@@ -152,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             }
             case R.id.nav_item_create_room: {
-              fragmentClass = CreateRoomFragment.class;
+              fragmentClass = RoomNewFragment.class;
                 break;
             }
             default: {
@@ -174,6 +170,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             e.printStackTrace();
         }
         drawerLayout.closeDrawer(GravityCompat.START);
+    }
+
+    private void signOut() {
+        FirebaseAuth.getInstance().signOut();
+        LoginManager.getInstance().logOut();
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 
 
@@ -237,37 +241,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     }
                 });
-
-//        fDatabase
-//                .getReference("rooms")
-//                .child(roomCode)
-//                .get()
-//                .addOnSuccessListener(snapshot -> {
-//                    if (snapshot != null && snapshot.exists()) {
-//                        Room room = snapshot.getValue(Room.class);
-//                        Log.d(TAG, "onDataChange: " + room.toString());
-//                        if (room.isUsePassword()) {
-//                            showPasswordDialog(room);
-//                        } else {
-//                            joinRoom(room);
-//                            drawerLayout.closeDrawer(GravityCompat.START);
-//                            return;
-//                        }
-//                    } else {
-//                        new AlertDialog.Builder(MainActivity.this)
-//                                .setTitle("We were not found your room code")
-//                                .setMessage("Please try another")
-//                                .setPositiveButton("OK", (dialog, which) -> {
-//                                    dialog.dismiss();
-//                                    etRoomCode.setText("");
-//                                    return;
-//                                }).show();
-//                        //not found room code given
-//                        Log.d(TAG, "onDataChange: cannot find room code");
-//                    }
-//                });
-
-
     }
 
     private void showPasswordDialog(Room room) {
@@ -334,5 +307,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

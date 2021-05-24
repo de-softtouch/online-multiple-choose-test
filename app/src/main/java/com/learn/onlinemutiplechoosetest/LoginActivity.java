@@ -1,4 +1,4 @@
- package com.learn.onlinemutiplechoosetest;
+package com.learn.onlinemutiplechoosetest;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -64,6 +65,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         FirebaseUser currentUser = fAuth.getCurrentUser();
         if (currentUser != null) {
             startMainActivity();
+        } else {
+            FirebaseAuth.getInstance().signOut();
+            LoginManager.getInstance().logOut();
         }
         getSupportActionBar().hide();
         setContentView(R.layout.acivity_login);
@@ -77,6 +81,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
+        closeInputMethod();
+        etEmail.clearFocus();
+        etPassword.clearFocus();
+        process.setVisibility(View.VISIBLE);
         switch (v.getId()) {
             case R.id.btn_signIn: {
                 String password = etPassword.getText().toString().trim();
@@ -109,8 +117,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 fbLoginManager = LoginManager.getInstance();
                 fbLoginManager.logOut();
                 List<String> permission = new ArrayList<>();
-                permission.add("public_profile");
                 permission.add("email");
+                permission.add("public_profile");
+                permission.add("user_friends");
                 fbLoginManager.logInWithReadPermissions(this, permission);
                 callbackManager = CallbackManager.Factory.create();
                 fbLoginManager.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -118,20 +127,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     public void onSuccess(LoginResult loginResult) {
                         Log.d(TAG, "facebook:onSuccess" + loginResult.toString());
                         firebaseAuthWithFacebook(loginResult.getAccessToken());
-
                     }
 
                     @Override
                     public void onCancel() {
+                        process.setVisibility(View.GONE);
                         Log.d(TAG, "facebook:onCancel");
                     }
 
                     @Override
                     public void onError(FacebookException error) {
+                        process.setVisibility(View.GONE);
+                        Toast.makeText(LoginActivity.this, "Sorry something went wrong!", Toast.LENGTH_SHORT).show();
                         Log.d(TAG, "facebook:onError " + error.toString());
                     }
                 });
-                process.setVisibility(View.GONE);
 
                 break;
             }
@@ -147,7 +157,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                process.setVisibility(View.VISIBLE);
                 firebaseAuthWithGoogle(account.getIdToken());
             } catch (ApiException e) {
                 Log.w(TAG, "Google sign in failed", e);
@@ -159,7 +168,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     void firebaseAuthWithGoogle(String idToken) {
-        process.setVisibility(View.VISIBLE);
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         fAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, task -> {
@@ -172,7 +180,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     } else {
                         Log.w(TAG, "signInWithCredential:failure", task.getException());
                         process.setVisibility(View.GONE);
-
                     }
                 });
 
@@ -288,4 +295,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         startActivity(intent);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        etEmail.clearFocus();
+        etPassword.clearFocus();
+        etEmail.setError(null);
+        etPassword.setError(null);
+
+
+    }
 }

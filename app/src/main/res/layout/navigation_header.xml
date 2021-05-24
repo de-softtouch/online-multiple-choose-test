@@ -53,7 +53,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center|start"
-                android:textColor="@color/white"
+                android:textColor="@color/electromagnetic"
                 android:textSize="16sp" />
         </LinearLayout>
 
