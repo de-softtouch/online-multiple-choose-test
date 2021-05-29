@@ -2,6 +2,7 @@ package com.learn.onlinemutiplechoosetest.ui.roomTest.ui;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +41,8 @@ public class RoomNewFragment extends Fragment implements View.OnClickListener {
     private QuizAdapter adapter;
     private RecyclerView recyclerView;
 
+    private MainActivity mainActivity;
+
     public RoomNewFragment() {
     }
 
@@ -48,6 +51,7 @@ public class RoomNewFragment extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         fragmentManager = ((MainActivity) getContext()).getSupportFragmentManager();
         roomViewModel = new ViewModelProvider(getActivity()).get(RoomViewModel.class);
+        mainActivity = ((MainActivity) getContext());
     }
 
     @Override
@@ -55,15 +59,21 @@ public class RoomNewFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
 
         View root = getViews(inflater, container);
-        new RoomBasicInfoDialog()
-                .show(((MainActivity) getContext())
-                        .getSupportFragmentManager(), "Basic Info");
 
         registerQuizzesChange();
         return root;
     }
 
     private void registerQuizzesChange() {
+        roomViewModel.getRoomNew().observe(getActivity(), room -> {
+            if (room != null) {
+                tvRoomName.setText(room.getName() + "");
+                tvTime.setText(room.getTime() + "");
+            } else {
+                new RoomBasicInfoDialog()
+                        .show(mainActivity.getSupportFragmentManager(), "Basic Info");
+
+            }
         roomViewModel.getQuizzes().observe(getActivity(), quizzes -> {
             if (quizzes != null) {
                 adapter = new QuizAdapter(getContext(), quizzes);
@@ -73,11 +83,9 @@ public class RoomNewFragment extends Fragment implements View.OnClickListener {
 //        adapter = new QuizAdapter(getContext(), roomViewModel.getQuizzes().getValue());
 //        recyclerView.setAdapter(adapter);
 
-        roomViewModel.getRoomNew().observe(getActivity(), room -> {
-            if (room != null) {
-                tvRoomName.setText(room.getName()+"");
-                tvTime.setText(room.getTime()+"");
-            }
+
+
+
         });
     }
 

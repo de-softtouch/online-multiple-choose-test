@@ -27,6 +27,7 @@ import com.learn.onlinemutiplechoosetest.model.Quiz;
 import com.learn.onlinemutiplechoosetest.model.Room;
 import com.learn.onlinemutiplechoosetest.model.User;
 import com.learn.onlinemutiplechoosetest.ui.main.HomeFragment;
+import com.learn.onlinemutiplechoosetest.ui.roomTest.RoomViewModel;
 import com.learn.onlinemutiplechoosetest.utils.RoomUtils;
 
 import java.util.Date;
@@ -41,6 +42,7 @@ public class RoomTestFragment extends Fragment implements QuizAdapter.OnAnswerCh
     private Room currentRoom;
     private MainActivityViewModel viewModel;
     private FirebaseDatabase fDatabase;
+    private RoomViewModel roomViewModel;
 
     long seconds;
     private Handler handler;
@@ -48,7 +50,7 @@ public class RoomTestFragment extends Fragment implements QuizAdapter.OnAnswerCh
     private TextView tvTimeCountDown, tvTitle;
     private Button btnSubmit;
 
-    private HashMap<Quiz, Answer> map = new HashMap<>();
+//    private HashMap<Quiz, Answer> map = new HashMap<>();
 
     public RoomTestFragment() {
     }
@@ -61,6 +63,10 @@ public class RoomTestFragment extends Fragment implements QuizAdapter.OnAnswerCh
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(getActivity()).get(MainActivityViewModel.class);
+        roomViewModel = new ViewModelProvider(getActivity()).get(RoomViewModel.class);
+        if (roomViewModel.getMap().getValue() == null) {
+            roomViewModel.getMap().setValue(new HashMap<>());
+        }
         fDatabase = FirebaseDatabase.getInstance();
     }
 
@@ -158,9 +164,9 @@ public class RoomTestFragment extends Fragment implements QuizAdapter.OnAnswerCh
     @Override
     public void onAnswerChecked(boolean isChecked, Quiz quiz, Answer answer) {
         if (isChecked) {
-            map.put(quiz, answer);
+            roomViewModel.getMap().getValue().put(quiz, answer);
         } else {
-            map.remove(quiz);
+            roomViewModel.getMap().getValue().remove(quiz);
         }
     }
 
@@ -170,6 +176,7 @@ public class RoomTestFragment extends Fragment implements QuizAdapter.OnAnswerCh
         switch (v.getId()) {
             case R.id.btn_submitAnswer: {
                 scoreDialog();
+                roomViewModel.getIsSubmitted().setValue(true);
                 User user = viewModel.getCurrentUserInfo().getValue();
                 String roomID = currentRoom.getId();
                 HashMap<String, Object> map = new HashMap<>();
@@ -186,7 +193,8 @@ public class RoomTestFragment extends Fragment implements QuizAdapter.OnAnswerCh
                 break;
             }
             case R.id.btn_back: {
-                new AlertDialog.Builder(getContext())
+             if(roomViewModel.getIsSubmitted().getValue()==false){
+                    new AlertDialog.Builder(getContext())
                         .setTitle("Are you sure to exit test?")
                         .setMessage("Your answer will not be submitted!")
                         .setPositiveButton("Ok", ((dialog, which) -> {
@@ -200,6 +208,14 @@ public class RoomTestFragment extends Fragment implements QuizAdapter.OnAnswerCh
                             dialog.dismiss();
                         }))
                         .show();
+             }else{
+                 ((MainActivity) getContext())
+                         .getSupportFragmentManager()
+                         .beginTransaction()
+                         .replace(R.id.nav_host_fragment, new HomeFragment())
+                         .commit();
+                 roomViewModel.getIsSubmitted().setValue(false);
+             }
                 break;
             }
         }
@@ -222,6 +238,6 @@ public class RoomTestFragment extends Fragment implements QuizAdapter.OnAnswerCh
     }
 
     public double getScore() {
-        return RoomUtils.caculateScore(RoomUtils.toAnswerMap(currentRoom.getQuizzes()), this.map);
+        return RoomUtils.caculateScore(RoomUtils.toAnswerMap(currentRoom.getQuizzes()), roomViewModel.getMap().getValue());
     }
 }

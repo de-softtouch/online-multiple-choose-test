@@ -43,7 +43,7 @@ public class RoomUtils {
         return finalScore;
     }
 
-    public static void addNewQuiz(List<Quiz> quizzes, Quiz quiz) {
+    public static List<Quiz>  addNewQuiz(List<Quiz> quizzes, Quiz quiz) {
         List<Answer> answers = quiz.getAnswers();
 
         for (int i = 0; i < quiz.getAnswers().size(); i++) {
@@ -60,6 +60,7 @@ public class RoomUtils {
         }
 
         quizzes.add(quiz);
+        return quizzes;
 
 
     }

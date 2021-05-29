@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fDatabase = FirebaseDatabase.getInstance();
     }
 
-    private void findRoomByRoomCode(String roomCode) {
+    public void findRoomByRoomCode(String roomCode) {
         fDatabase
                 .getReference("room-with-code")
                 .child(roomCode)
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void selectDrawerItem(MenuItem item) {
+    public void selectDrawerItem(MenuItem item) {
         Class fragmentClass = null;
         Fragment fragment;
         switch (item.getItemId()) {
@@ -185,6 +185,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         drawerLayout = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav, R.string.close);
         drawerToggle.setDrawerIndicatorEnabled(true);
+
         drawerToggle.syncState();
         drawerLayout.addDrawerListener(drawerToggle);
     }

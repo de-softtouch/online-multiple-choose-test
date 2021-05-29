@@ -2,12 +2,10 @@ package com.learn.onlinemutiplechoosetest.ui.quiz;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,6 +14,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.learn.onlinemutiplechoosetest.MainActivity;
 import com.learn.onlinemutiplechoosetest.R;
 import com.learn.onlinemutiplechoosetest.model.Answer;
 import com.learn.onlinemutiplechoosetest.model.Quiz;
@@ -29,8 +28,9 @@ public class QuizNewDialog extends DialogFragment implements View.OnClickListene
 
     private final String TAG = getClass().getSimpleName();
 
-    private TextInputEditText etQuizName, etRightAnswer;
-    private ImageButton btnAddAnswer;
+    private TextInputEditText etRightAnswer;
+    private TextInputEditText etQuizName;
+    private Button btnAddAnswer;
     private ViewGroup viewGroup;
     private Button btnSubmitQuiz;
     private List<TextInputEditText> etWrongAnswers = new ArrayList<>();
@@ -57,7 +57,9 @@ public class QuizNewDialog extends DialogFragment implements View.OnClickListene
             if (etWrongAnswers.size() < 3) {
                 TextInputEditText et = (TextInputEditText) inflater.inflate(R.layout.wrong_answer_entry, viewGroup, false);
                 viewGroup.addView(et);
+                et.requestFocus();
                 etWrongAnswers.add(et);
+                ((MainActivity) getContext()).closeInputMethod();
             } else {
                 Toast.makeText(getContext(), "Only 3 answer", Toast.LENGTH_LONG).show();
             }
@@ -68,7 +70,7 @@ public class QuizNewDialog extends DialogFragment implements View.OnClickListene
     }
 
 
-    private Quiz submitQuiz() {
+    private void submitQuiz() {
         Quiz quiz = new Quiz();
         List<Answer> answers = new ArrayList<>();
         //wrong answers
@@ -93,9 +95,9 @@ public class QuizNewDialog extends DialogFragment implements View.OnClickListene
         quiz.setScore(1);
         quiz.setAnswers(answers);
         quiz.setTitle(etQuizName.getText().toString());
-        RoomUtils.addNewQuiz(viewModel.getQuizzes().getValue()
+        List<Quiz> quizzes = RoomUtils.addNewQuiz(viewModel.getQuizzes().getValue()
                 , quiz);
-        return quiz;
+        viewModel.getQuizzes().setValue(quizzes);
     }
 
     @Override
@@ -114,8 +116,7 @@ public class QuizNewDialog extends DialogFragment implements View.OnClickListene
                     Toast.makeText(getContext(), "There is at least two wrong answers", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Quiz quiz = submitQuiz();
-                Log.d(TAG, "onCreateRoom: " + quiz);
+                submitQuiz();
                 this.dismiss();
                 break;
             }

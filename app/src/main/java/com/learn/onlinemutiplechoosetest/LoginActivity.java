@@ -69,7 +69,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             FirebaseAuth.getInstance().signOut();
             LoginManager.getInstance().logOut();
         }
-        getSupportActionBar().hide();
+//        getSupportActionBar().hide();
         setContentView(R.layout.acivity_login);
         getViews();
 
