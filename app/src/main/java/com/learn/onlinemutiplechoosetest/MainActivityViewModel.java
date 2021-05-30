@@ -24,6 +24,7 @@ public class MainActivityViewModel extends ViewModel {
     private MutableLiveData<User> currentUserInfo = new MutableLiveData<>();
     private MutableLiveData<Room> roomMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Quiz>> quizzesNew = new MutableLiveData<>();
+
     public MainActivityViewModel() {
         quizzesNew.setValue(new ArrayList<>());
         FirebaseAuth fAuth = FirebaseAuth.getInstance();

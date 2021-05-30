@@ -1,4 +1,4 @@
-package com.learn.onlinemutiplechoosetest.ui.roomTest;
+package com.learn.onlinemutiplechoosetest.ui.roomTest.roomTst;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;

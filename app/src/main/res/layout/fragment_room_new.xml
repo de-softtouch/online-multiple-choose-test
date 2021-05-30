@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.roomTest.ui.RoomNewFragment">
+    tools:context=".ui.roomTest.roomNew.RoomNewFragment">
 
     <TextView
         android:id="@+id/textView5"
@@ -24,7 +24,12 @@
             android:id="@+id/btn_saveRoomNew"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:backgroundTint="@color/emerald"
             android:text="Save Room"
+            android:textColor="@color/white"
+            android:textColorLink="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rcv_quizzesNew" />
@@ -55,7 +60,8 @@
                 android:gravity="center"
                 android:text="Room name"
                 android:textAlignment="center"
-                android:textSize="24sp"
+                android:textColor="@color/primary"
+                android:textSize="34sp"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -83,7 +89,7 @@
         </LinearLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floatingActionButton"
+            android:id="@+id/fab_addQuiz"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"

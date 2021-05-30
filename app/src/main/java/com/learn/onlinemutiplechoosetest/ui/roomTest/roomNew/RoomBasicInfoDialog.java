@@ -1,4 +1,4 @@
-package com.learn.onlinemutiplechoosetest.ui.roomTest.ui;
+package com.learn.onlinemutiplechoosetest.ui.roomTest.roomNew;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -20,7 +20,7 @@ import com.learn.onlinemutiplechoosetest.MainActivity;
 import com.learn.onlinemutiplechoosetest.R;
 import com.learn.onlinemutiplechoosetest.model.Room;
 import com.learn.onlinemutiplechoosetest.ui.main.HomeFragment;
-import com.learn.onlinemutiplechoosetest.ui.roomTest.RoomViewModel;
+import com.learn.onlinemutiplechoosetest.ui.roomTest.roomTst.RoomViewModel;
 
 import java.util.UUID;
 

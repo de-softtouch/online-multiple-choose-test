@@ -1,4 +1,4 @@
-package com.learn.onlinemutiplechoosetest.ui.roomTest.ui;
+package com.learn.onlinemutiplechoosetest.ui.roomTest.roomTst;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
@@ -27,7 +27,6 @@ import com.learn.onlinemutiplechoosetest.model.Quiz;
 import com.learn.onlinemutiplechoosetest.model.Room;
 import com.learn.onlinemutiplechoosetest.model.User;
 import com.learn.onlinemutiplechoosetest.ui.main.HomeFragment;
-import com.learn.onlinemutiplechoosetest.ui.roomTest.RoomViewModel;
 import com.learn.onlinemutiplechoosetest.utils.RoomUtils;
 
 import java.util.Date;

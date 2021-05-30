@@ -18,7 +18,7 @@ import com.learn.onlinemutiplechoosetest.MainActivity;
 import com.learn.onlinemutiplechoosetest.R;
 import com.learn.onlinemutiplechoosetest.model.Answer;
 import com.learn.onlinemutiplechoosetest.model.Quiz;
-import com.learn.onlinemutiplechoosetest.ui.roomTest.RoomViewModel;
+import com.learn.onlinemutiplechoosetest.ui.roomTest.roomTst.RoomViewModel;
 import com.learn.onlinemutiplechoosetest.utils.RoomUtils;
 
 import java.util.ArrayList;

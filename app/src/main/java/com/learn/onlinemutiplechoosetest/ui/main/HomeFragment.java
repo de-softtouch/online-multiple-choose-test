@@ -13,40 +13,23 @@ import androidx.fragment.app.FragmentManager;
 import com.google.android.material.textfield.TextInputEditText;
 import com.learn.onlinemutiplechoosetest.MainActivity;
 import com.learn.onlinemutiplechoosetest.R;
-import com.learn.onlinemutiplechoosetest.ui.roomTest.ui.RoomNewFragment;
+import com.learn.onlinemutiplechoosetest.ui.roomTest.createdRooms.CreatedRoomFragment;
+import com.learn.onlinemutiplechoosetest.ui.roomTest.roomNew.RoomNewFragment;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private Button btnCreateRoom;
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    private String mParam1;
-    private String mParam2;
     private TextInputEditText etRoomCode;
-    private Button btnFind;
-
+    private Button btnFind, btnViewCreatedRoom;
     public HomeFragment() {
-        // Required empty public constructor
     }
 
-
-    public static HomeFragment newInstance(String param1, String param2) {
-        HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
@@ -60,7 +43,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         btnFind = root.findViewById(R.id.btn_hFindRoom);
 
         btnFind.setOnClickListener(this);
-
+        btnViewCreatedRoom = root.findViewById(R.id.btn_viewCreatedRoom);
+        btnViewCreatedRoom.setOnClickListener(this);
 
 //        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
 //            @Override
@@ -81,6 +65,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         .replace(R.id.nav_host_fragment, new RoomNewFragment())
                         .addToBackStack(null)
                         .commit();
+                break;
             }
             case R.id.btn_hFindRoom: {
                 etRoomCode.setError(null);
@@ -88,10 +73,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 if (!TextUtils.isEmpty(code)) {
                     ((MainActivity) getContext()).findRoomByRoomCode(code);
                     ((MainActivity) getContext()).closeInputMethod();
-                }else{
+                } else {
                     etRoomCode.setError("Please enter code before find");
 
                 }
+                break;
+            }
+            case R.id.btn_viewCreatedRoom: {
+                FragmentManager manager = ((MainActivity) getContext()).getSupportFragmentManager();
+                manager.beginTransaction()
+                        .replace(R.id.nav_host_fragment, new CreatedRoomFragment())
+                        .addToBackStack(null)
+                        .commit();
                 break;
             }
         }

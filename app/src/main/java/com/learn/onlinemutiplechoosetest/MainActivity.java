@@ -37,8 +37,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.learn.onlinemutiplechoosetest.model.Room;
 import com.learn.onlinemutiplechoosetest.ui.main.HomeFragment;
 import com.learn.onlinemutiplechoosetest.ui.profile.ProfileFragment;
-import com.learn.onlinemutiplechoosetest.ui.roomTest.ui.RoomNewFragment;
-import com.learn.onlinemutiplechoosetest.ui.roomTest.ui.RoomTestFragment;
+import com.learn.onlinemutiplechoosetest.ui.roomTest.roomNew.RoomNewFragment;
+import com.learn.onlinemutiplechoosetest.ui.roomTest.roomTst.RoomTestFragment;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
