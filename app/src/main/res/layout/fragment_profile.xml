@@ -9,7 +9,7 @@
     <!-- TODO: Update blank fragment layout -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/textView3"
@@ -73,68 +73,89 @@
             </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <EditText
-            android:id="@+id/et_pUsername"
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:id="@+id/hihi"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="32dp"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Username"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 
-        <EditText
-            android:id="@+id/et_profileEmail"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_pUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:inputType="textPersonName"
+                android:text="Username" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+
+
+            android:id="@+id/sdsddsdsd"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:editable="false"
             android:ems="10"
             android:focusable="false"
-            android:inputType="textPersonName"
-            android:text="Email"
-            app:layout_constraintEnd_toEndOf="@+id/et_pUsername"
-            app:layout_constraintStart_toStartOf="@+id/et_pUsername"
-            app:layout_constraintTop_toBottomOf="@+id/et_pUsername" />
+            app:layout_constraintEnd_toEndOf="@+id/hihi"
+            app:layout_constraintStart_toStartOf="@+id/hihi"
+            app:layout_constraintTop_toBottomOf="@+id/hihi">
 
-        <EditText
-            android:id="@+id/editTextTextPersonName3"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_profileEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:inputType="textEmailAddress"
+                android:text="Email" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+
+            android:id="@+id/textInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Name"
-            app:layout_constraintEnd_toEndOf="@+id/et_profileEmail"
-            app:layout_constraintStart_toStartOf="@+id/et_profileEmail"
-            app:layout_constraintTop_toBottomOf="@+id/et_profileEmail" />
+            app:layout_constraintEnd_toEndOf="@+id/sdsddsdsd"
+            app:layout_constraintStart_toStartOf="@+id/sdsddsdsd"
+            app:layout_constraintTop_toBottomOf="@+id/sdsddsdsd">
 
-        <EditText
-            android:id="@+id/editTextTextPersonName4"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Name"
-            app:layout_constraintEnd_toEndOf="@+id/editTextTextPersonName3"
-            app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName3"
-            app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName3" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextTextPersonName3"
+                android:layout_width="match_parent"
+
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:text="Name" />
+        </com.google.android.material.textfield.TextInputLayout>
+
 
         <Button
             android:id="@+id/btn_update"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="64dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+
             android:backgroundTint="@color/primary"
-            android:text="Button"
-            app:layout_constraintEnd_toEndOf="@+id/editTextTextPersonName4"
-            app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName4"
-            app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName4" />
+            android:text="Save"
+            android:textColor="@color/white"
+            android:translationZ="100dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
         <ImageButton
             android:id="@+id/imageButton3"

@@ -36,4 +36,5 @@ public class Quiz {
     public int hashCode() {
         return Objects.hash(quizNumber, title, score, answers);
     }
+
 }

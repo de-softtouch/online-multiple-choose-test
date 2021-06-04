@@ -46,6 +46,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
         app:hintEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -59,6 +61,8 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
         app:hintEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -77,5 +81,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:backgroundTint="@color/button_submitted"
-        android:text="Save" />
+        android:text="Save"
+        android:textAllCaps="false"
+        android:textColor="@color/white" />
 </LinearLayout>

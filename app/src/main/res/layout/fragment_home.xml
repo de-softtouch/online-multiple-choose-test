@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.HomeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -15,32 +14,34 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_margin="10dp"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="wrap_content"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="Enter room code"
-                android:textColorHint="@color/purple_500"
-                app:boxBackgroundColor="@null"
-                app:endIconMode="custom">
+                android:layout_gravity="center"
+
+                android:layout_weight="1">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_hRoomCode"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:imeOptions="flagNoExtractUi"
-                    android:textAllCaps="true" />
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/btn_hFindRoom"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
                 android:background="@color/primary"
-                android:backgroundTint="@color/primary"
+                android:gravity="center"
                 android:text="Find"
                 android:textColor="@color/white" />
 

@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
@@ -40,22 +41,17 @@ import static android.app.Activity.RESULT_OK;
 
 public class ProfileFragment extends Fragment implements View.OnClickListener {
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
     private MainActivityViewModel viewModel;
 
-    private String mParam1;
-    private String mParam2;
 
     private FirebaseStorage fStorage;
-    private StorageReference storageReference;
 
     private ImageView ivAvatar, btnChangeImage;
     private Button btnUpdate;
     private User userInfo;
     private ProgressBar progressBar;
-    private EditText etUsername, etEmail;
+    private TextInputEditText etUsername, etEmail;
 
     private Bitmap bitmap;
     private FirebaseFirestore fFirestore;
@@ -66,20 +62,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    public static ProfileFragment newInstance(String param1, String param2) {
-        ProfileFragment fragment = new ProfileFragment();
-        return fragment;
-    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
 
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
         fAuth = FirebaseAuth.getInstance();
         fFirestore = FirebaseFirestore.getInstance();
         fStorage = FirebaseStorage.getInstance();

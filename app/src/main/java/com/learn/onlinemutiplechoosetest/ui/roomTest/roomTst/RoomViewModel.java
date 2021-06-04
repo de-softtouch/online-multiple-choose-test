@@ -18,13 +18,19 @@ import lombok.Getter;
 public class RoomViewModel extends ViewModel {
 
     private MutableLiveData<Room> roomNew = new MutableLiveData<>();
+
     private MutableLiveData<List<Quiz>> quizzes = new MutableLiveData<>();
     private MutableLiveData<HashMap<Quiz, Answer>> map = new MutableLiveData<>();
     private MutableLiveData<Boolean> isSubmitted = new MutableLiveData<>();
+
     public RoomViewModel() {
         quizzes.setValue(new ArrayList<>());
         roomNew.setValue(null);
         isSubmitted.setValue(false);
     }
 
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+    }
 }

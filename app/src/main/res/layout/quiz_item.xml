@@ -4,12 +4,34 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_quizTitle"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textSize="20sp" />
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_quizTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|left"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-condensed-light"
+            android:text="Nếu bạn chấp nhận, thông tin liên hệ của bạn sẽ được chia sẻ với các thành viên của lớp học và những ứng dụng mà họ cho phép sử dụng Lớp học"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/quiz_mn_options"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|top"
+            android:padding="10dp"
+            android:text="@string/tv_menu"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/cb_container"

@@ -20,6 +20,7 @@ public class Room {
     private String id;
     private String adminId;
     private String name;
+    private String code;
     private String password;
     private int maxUser;
     private Date dateToTest;

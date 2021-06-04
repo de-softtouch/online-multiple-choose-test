@@ -32,11 +32,11 @@ import com.learn.onlinemutiplechoosetest.utils.RoomUtils;
 import java.util.Date;
 import java.util.HashMap;
 
-public class RoomTestFragment extends Fragment implements QuizAdapter.OnAnswerCheckedListener, View.OnClickListener {
+public class RoomTestFragment extends Fragment implements QuizViewAdapter.OnAnswerCheckedListener, View.OnClickListener {
 
     private final String TAG = getClass().getSimpleName();
 
-    private QuizAdapter adapter;
+    private QuizViewAdapter adapter;
     private RecyclerView recyclerView;
     private Room currentRoom;
     private MainActivityViewModel viewModel;
@@ -49,7 +49,6 @@ public class RoomTestFragment extends Fragment implements QuizAdapter.OnAnswerCh
     private TextView tvTimeCountDown, tvTitle;
     private Button btnSubmit;
 
-//    private HashMap<Quiz, Answer> map = new HashMap<>();
 
     public RoomTestFragment() {
     }
@@ -79,7 +78,7 @@ public class RoomTestFragment extends Fragment implements QuizAdapter.OnAnswerCh
                 Log.d(TAG, "onCreateView: " + currentRoom.toString());
                 tvTitle.setText(room.getName());
                 tvTimeCountDown.setText(formatTime(room.getTime()));
-                adapter = new QuizAdapter(getContext(), currentRoom.getQuizzes());
+                adapter = new QuizViewAdapter(getContext(), currentRoom.getQuizzes());
                 adapter.setOnAnswerCheckedListener(this);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
                 recyclerView.setAdapter(adapter);
@@ -239,4 +238,6 @@ public class RoomTestFragment extends Fragment implements QuizAdapter.OnAnswerCh
     public double getScore() {
         return RoomUtils.caculateScore(RoomUtils.toAnswerMap(currentRoom.getQuizzes()), roomViewModel.getMap().getValue());
     }
+
+    
 }

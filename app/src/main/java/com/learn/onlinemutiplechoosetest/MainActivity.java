@@ -37,7 +37,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.learn.onlinemutiplechoosetest.model.Room;
 import com.learn.onlinemutiplechoosetest.ui.main.HomeFragment;
 import com.learn.onlinemutiplechoosetest.ui.profile.ProfileFragment;
-import com.learn.onlinemutiplechoosetest.ui.roomTest.roomNew.RoomNewFragment;
+import com.learn.onlinemutiplechoosetest.ui.roomTest.roomNew.RoomBasicInfoDialog;
 import com.learn.onlinemutiplechoosetest.ui.roomTest.roomTst.RoomTestFragment;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -120,14 +120,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             ivAvatar = headerView.findViewById(R.id.iv_navigationAvartar);
             tvUsername = headerView.findViewById(R.id.tv_navUsername);
             etRoomCode = headerView.findViewById(R.id.et_roomCode);
-            etRoomCode.setText("5f619064-4022-40ac-a5a9-fb7943822310");
             Button btnFindRoom = headerView.findViewById(R.id.btn_findRomm);
             btnFindRoom.setOnClickListener(this);
         }
     }
 
     public void selectDrawerItem(MenuItem item) {
-        Class fragmentClass = null;
+        Class fragmentClass;
         Fragment fragment;
         switch (item.getItemId()) {
             case R.id.nav_item_logout: {
@@ -148,8 +147,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             }
             case R.id.nav_item_create_room: {
-              fragmentClass = RoomNewFragment.class;
-                break;
+//                //
+//              fragmentClass = RoomNewFragment.class;
+                new RoomBasicInfoDialog().show(getSupportFragmentManager(), "room-basic-dialog");
+                return;
             }
             default: {
                 fragmentClass = HomeFragment.class;
@@ -164,12 +165,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .addToBackStack(null)
                     .replace(R.id.nav_host_fragment, fragment)
                     .commit();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
+        } catch (IllegalAccessException | InstantiationException e) {
             e.printStackTrace();
         }
-        drawerLayout.closeDrawer(GravityCompat.START);
+        closeDrawer();
+    }
+
+    public void closeDrawer() {
+        if (drawerLayout.isOpen()) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+
+        }
     }
 
     private void signOut() {
@@ -220,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 showPasswordDialog(room);
                             } else {
                                 openRoomTestFragment(room);
-                                drawerLayout.closeDrawer(GravityCompat.START);
+                                closeDrawer();
                                 progressBar.setVisibility(View.GONE);
                             }
                         } else {
@@ -268,7 +274,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Toast.makeText(MainActivity.this, "Enter success!", Toast.LENGTH_SHORT).show();
                         openRoomTestFragment(room);
                         dialog.dismiss();
-                        drawerLayout.closeDrawer(GravityCompat.START);
+                        closeDrawer();
                     } else {
                         etPassword.setError("Your password is not correct");
                         Toast.makeText(MainActivity.this, "Enter failure!", Toast.LENGTH_SHORT).show();
@@ -294,24 +300,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_findRomm: {
-                progressBar.setVisibility(View.VISIBLE);
-                closeInputMethod();
+        if (v.getId() == R.id.btn_findRomm) {
+            progressBar.setVisibility(View.VISIBLE);
+            closeInputMethod();
 
-                String roomCode = etRoomCode.getText().toString().trim();
-                if (TextUtils.isEmpty(roomCode)) {
-                    etRoomCode.setText("Please enter room code to join room");
-                    return;
-                }
-                findRoomByRoomCode(roomCode);
-                break;
+            String roomCode = etRoomCode.getText().toString().trim();
+            if (TextUtils.isEmpty(roomCode)) {
+                etRoomCode.setText("Please enter room code to join room");
+                return;
             }
+            findRoomByRoomCode(roomCode);
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
+
 }

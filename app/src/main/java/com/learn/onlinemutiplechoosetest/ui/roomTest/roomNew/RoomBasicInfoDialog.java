@@ -2,7 +2,6 @@ package com.learn.onlinemutiplechoosetest.ui.roomTest.roomNew;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,14 +14,10 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.FirebaseAuth;
 import com.learn.onlinemutiplechoosetest.MainActivity;
 import com.learn.onlinemutiplechoosetest.R;
-import com.learn.onlinemutiplechoosetest.model.Room;
 import com.learn.onlinemutiplechoosetest.ui.main.HomeFragment;
 import com.learn.onlinemutiplechoosetest.ui.roomTest.roomTst.RoomViewModel;
-
-import java.util.UUID;
 
 public class RoomBasicInfoDialog extends DialogFragment implements View.OnClickListener {
 
@@ -55,11 +50,12 @@ public class RoomBasicInfoDialog extends DialogFragment implements View.OnClickL
 
     @Override
     public void onClick(View v) {
+        MainActivity mainActivity = (MainActivity) getContext();
         switch (v.getId()) {
 
             case R.id.btn_closeCreateRoom: {
                 this.dismiss();
-                ((MainActivity) getContext()).getSupportFragmentManager()
+                mainActivity.getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.nav_host_fragment, new HomeFragment())
                         .commit();
@@ -76,15 +72,15 @@ public class RoomBasicInfoDialog extends DialogFragment implements View.OnClickL
                     etRoomTime.setError("");
                     return;
                 }
-                Room room = new Room();
-                room.setId(UUID.randomUUID().toString());
-                room.setUsePassword(false);
-                room.setName(roomName);
-                room.setTime(Integer.parseInt(roomTime));
-                room.setAdminId(FirebaseAuth.getInstance().getUid());
+                Bundle bundle = new Bundle();
+                bundle.putString(RoomNewFragment.ROOM_NAME_KEY, roomName);
+                bundle.putInt(RoomNewFragment.ROOM_TIME_KEY, Integer.parseInt(roomTime));
 
-                roomViewModel.getRoomNew().setValue(room);
-                Log.d(TAG, "onCreateRoom: "+room.toString());
+                mainActivity.closeDrawer();
+                mainActivity.getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.nav_host_fragment, RoomNewFragment.class, bundle)
+                        .addToBackStack(null)
+                        .commit();
                 this.dismiss();
             }
         }

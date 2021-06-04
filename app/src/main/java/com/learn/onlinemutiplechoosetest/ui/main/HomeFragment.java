@@ -14,6 +14,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.learn.onlinemutiplechoosetest.MainActivity;
 import com.learn.onlinemutiplechoosetest.R;
 import com.learn.onlinemutiplechoosetest.ui.roomTest.createdRooms.CreatedRoomFragment;
+import com.learn.onlinemutiplechoosetest.ui.roomTest.roomNew.RoomBasicInfoDialog;
 import com.learn.onlinemutiplechoosetest.ui.roomTest.roomNew.RoomNewFragment;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
@@ -61,10 +62,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.btn_hCreateRoom: {
                 FragmentManager manager = ((MainActivity) getContext()).getSupportFragmentManager();
-                manager.beginTransaction()
-                        .replace(R.id.nav_host_fragment, new RoomNewFragment())
-                        .addToBackStack(null)
-                        .commit();
+                new RoomBasicInfoDialog().show(manager,"room-basic-dialog");
                 break;
             }
             case R.id.btn_hFindRoom: {

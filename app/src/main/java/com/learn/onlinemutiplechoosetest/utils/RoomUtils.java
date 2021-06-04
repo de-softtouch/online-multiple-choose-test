@@ -3,6 +3,7 @@ package com.learn.onlinemutiplechoosetest.utils;
 import com.learn.onlinemutiplechoosetest.model.Answer;
 import com.learn.onlinemutiplechoosetest.model.Quiz;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +44,7 @@ public class RoomUtils {
         return finalScore;
     }
 
-    public static List<Quiz>  addNewQuiz(List<Quiz> quizzes, Quiz quiz) {
+    public static List<Quiz> addNewQuiz(List<Quiz> quizzes, Quiz quiz) {
         List<Answer> answers = quiz.getAnswers();
 
         for (int i = 0; i < quiz.getAnswers().size(); i++) {
@@ -63,6 +64,27 @@ public class RoomUtils {
         return quizzes;
 
 
+    }
+
+    public static Answer getRightAnswer(Quiz quiz) {
+        for (Answer a :
+                quiz.getAnswers()) {
+            if (a.isTrue()) {
+                return a;
+            }
+        }
+        return null;
+    }
+
+    public static List<Answer> getWrongAnswers(Quiz quiz) {
+        List<Answer> rs = new ArrayList<>();
+        for (Answer a :
+                quiz.getAnswers()) {
+            if (!a.isTrue()) {
+                rs.add(a);
+            }
+        }
+        return rs;
     }
 
 }

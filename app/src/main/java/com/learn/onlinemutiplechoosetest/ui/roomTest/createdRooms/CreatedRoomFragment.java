@@ -1,10 +1,14 @@
 package com.learn.onlinemutiplechoosetest.ui.roomTest.createdRooms;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -25,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class CreatedRoomFragment extends Fragment {
+public class CreatedRoomFragment extends Fragment implements RoomsCreatedAdapter.OnPopupMenuItemClick {
 
     private static final String TAG = "TAG";
     private FirebaseDatabase database;
@@ -33,7 +37,7 @@ public class CreatedRoomFragment extends Fragment {
     private CreatedRoomViewModel viewModel;
     private RoomsCreatedAdapter adapter;
     private RecyclerView recyclerView;
-
+    private List<Room> rooms;
     private ProgressBar progressBar;
 
     public CreatedRoomFragment() {
@@ -46,7 +50,7 @@ public class CreatedRoomFragment extends Fragment {
         super.onCreate(savedInstanceState);
         firebaseAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
-        viewModel = new ViewModelProvider(getActivity()).get(CreatedRoomViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(CreatedRoomViewModel.class);
     }
 
     @Override
@@ -71,7 +75,8 @@ public class CreatedRoomFragment extends Fragment {
                                 rooms.add(roomSnapshot.getValue(Room.class));
                             }
                             viewModel.getCreatedRooms().setValue(rooms);
-                        }else{
+                        } else {
+                            viewModel.getCreatedRooms().setValue(null);
                             progressBar.setVisibility(View.GONE);
 
                         }
@@ -80,15 +85,19 @@ public class CreatedRoomFragment extends Fragment {
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
                         progressBar.setVisibility(View.GONE);
-
                     }
                 });
 
         viewModel.getCreatedRooms().observe(getViewLifecycleOwner(), rooms -> {
             if (!rooms.isEmpty()) {
+                this.rooms = rooms;
                 adapter = new RoomsCreatedAdapter(rooms, getContext());
+                adapter.setOnPopupMenuItemClick(this);
                 recyclerView.setAdapter(adapter);
                 progressBar.setVisibility(View.GONE);
+            }else{
+                adapter = new RoomsCreatedAdapter(new ArrayList<>(), getContext());
+                recyclerView.setAdapter(adapter);
 
             }
 
@@ -99,4 +108,28 @@ public class CreatedRoomFragment extends Fragment {
     }
 
 
+    @Override
+    public void popupMenuItemClick(MenuItem menuItem, int position, String roomId) {
+        if (menuItem.getItemId() == R.id.remove_room) {
+
+            new AlertDialog.Builder(getContext())
+                    .setTitle("Are you sure to delete room")
+                    .setMessage("All data will lose")
+                    .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                    .setPositiveButton("Ok", (dialog, which) -> FirebaseDatabase.getInstance()
+                            .getReference("rooms")
+                            .child(roomId)
+                            .removeValue()
+                            .addOnSuccessListener(unused -> {
+                                viewModel.getCreatedRooms().getValue().remove(position);
+                                adapter.notifyItemRemoved(position);
+                                adapter.notifyItemRangeChanged(position, this.rooms.size());
+                                Toast.makeText(getContext(), "Remove success", Toast.LENGTH_SHORT).show();
+                            })
+                            .addOnFailureListener(e -> Log.d(TAG, "popupMenuItemClick: ", e.fillInStackTrace()))).show();
+
+        } else if (menuItem.getItemId() == R.id.edit_room) {
+
+        }
+    }
 }

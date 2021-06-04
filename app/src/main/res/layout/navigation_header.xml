@@ -71,7 +71,7 @@
                 android:ems="10"
                 android:hint="Enter room code you wanna join"
                 android:inputType="textPersonName"
-                android:textColorHint="@color/blue_night"
+                android:textColorHint="@color/electromagnetic"
                 android:textSize="14sp"
                 android:textStyle="italic" />
 
@@ -81,7 +81,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:backgroundTint="@color/primary"
-                android:text="Join" />
+                android:text="Join"
+                android:textColor="@color/white" />
         </LinearLayout>
 
     </LinearLayout>
